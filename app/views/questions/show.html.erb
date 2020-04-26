@@ -1,0 +1,67 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @question.title %>
+</p>
+
+<%= form_tag('/follows/follow_user',:method=>"post") do %>
+    <input type="hidden" name="user_id" value="<%= current_user.id %>">
+    <input type="hidden" name="question_id" value="<%= @question.id %>">
+    <input type="hidden" name="followable_type" value="User">    
+	<% @users = User.all %>
+	<%= select_tag "user", options_from_collection_for_select(@users, "id", "email"),:include_blank=> "Select User",:class=>"user",:name => "followable_id",:style=>"width: 100px;" %>
+
+	<button class="userfollow" style="width: 100px;">Follow User</button>
+<% end %>
+
+<%= form_tag('/follows/follow_topic',:method=>"post") do %>
+    <input type="hidden" name="user_id" value="<%= current_user.id %>">
+    <input type="hidden" name="question_id" value="<%= @question.id %>"> 
+    <input type="hidden" name="followable_type" value="Topic">           
+	<% @topics = Topic.all %>
+	<%= select_tag "topic", options_from_collection_for_select(@topics, "id", "name"),:include_blank=> "Select Topic",:class=>"topic",:name => "followable_id",:style=>"width: 100px;" %>
+	<button class="topicfollow" style="width: 100px;">Follow Topic</button>
+<% end %>
+
+<%= form_tag('/follows/unfollow_user',:method=>"post") do %>
+    <input type="hidden" name="user_id" value="<%= current_user.id %>">
+    <input type="hidden" name="question_id" value="<%= @question.id %>">    
+    <input type="hidden" name="followable_type" value="User">        
+	<% @users = User.all %>
+	<%= select_tag "user", options_from_collection_for_select(@users, "id", "email"),:include_blank=> "Select User",:class=>"userun",:name => "followable_id",:style=>"width: 100px;" %>
+
+	<button class="userunfollow" style="width: 100px;">UnFollow User</button>
+<% end %>
+
+<%= form_tag('/follows/unfollow_topic',:method=>"post") do %>
+    <input type="hidden" name="user_id" value="<%= current_user.id %>">
+    <input type="hidden" name="question_id" value="<%= @question.id %>">    
+    <input type="hidden" name="followable_type" value="Topic">               
+	<% @topics = Topic.all %>
+	<%= select_tag "topic", options_from_collection_for_select(@topics, "id", "name"),:include_blank=> "Select Topic",:class=>"topicun",:name => "followable_id",:style=>"width: 100px;" %>
+	<button class="topicunfollow" style="width: 100px;">UnFollow Topic</button>
+<% end %>
+
+<%= link_to 'Back', questions_path %>
+
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$(".userfollow").click(function(){
+			form = $(this).closest("form");
+			form.submit();
+		});
+		$(".topicfollow").click(function(){
+			form = $(this).closest("form");
+			form.submit();
+		});		
+		$(".userunfollow").click(function(){
+			form = $(this).closest("form");
+			form.submit();
+		});
+		$(".topicunfollow").click(function(){
+			form = $(this).closest("form");
+			form.submit();
+		});				
+	});
+</script>
